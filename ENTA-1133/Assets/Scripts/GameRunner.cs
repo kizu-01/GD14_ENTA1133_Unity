@@ -16,11 +16,9 @@ public class GameRunner : MonoBehaviour
         // Show game instructions
 
         Debug.Log("How to Play:");
-        Debug.Log("1. You and your opponent will each roll a dice.");
-        Debug.Log("2. You get to choose which die to roll (d4, d6, d8, d12, or d20).");
-        Debug.Log("3. The opponent will automatically choose a die.");
-        Debug.Log("4. Whoever rolls the higher number wins the round and gets a point.");
-        Debug.Log("5. If it’s a tie, no one gets a point and the game ends.");
+        Debug.Log("1. Each player will automatically choose a die to roll (d4, d6, d8, d12, or d20).");
+        Debug.Log("2. Whoever rolls the higher number wins the round and gets a point.");
+        Debug.Log("3. If it’s a tie, no one gets a point and the game ends.");
         Debug.Log("");
         Debug.Log("That's it. Let the game begin!");
         Debug.Log("");
