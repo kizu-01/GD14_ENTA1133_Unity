@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
@@ -7,33 +8,40 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int MapSize = 3;
     private RoomBaseMono[,] _map;
 
+    public RoomBaseMono GetRoomAt(int x, int z) {
+        if (x < 0 || x > _map.GetLength(1) - 1 || z < 0 || z > _map.GetLength(0) - 1)
+            return null;
+        return _map[z, x];
+    }
+
     public void CreateMap()
     {
         _map = new RoomBaseMono[MapSize, MapSize];
-        for (int x = 0; x < MapSize; x++)
+        for (int z = 0; z < MapSize; z++)
         {
-            for (int z = 0; z < MapSize; z++)
+            for (int x = 0; x < MapSize; x++)
             {
-                Vector3 coords = new Vector3(x * RoomSize, 3, z * RoomSize);
+                Vector3 coords = new Vector3(x * RoomSize, 3, -z * RoomSize);
 
                 var roomInstance = Instantiate(RoomPrefabs[Random.Range(0, RoomPrefabs.Length)], transform);
 
+                roomInstance.name += $"[{x},{z}]";
                 roomInstance.transform.position = coords;
 
-                _map[x, z] = roomInstance;
+                _map[z, x] = roomInstance;
             }
         }
-        for (int x = 0; x < MapSize; x++)
+        for (int z = 0; z < MapSize; z++)
         {
-            for (int z = 0; z < MapSize; z++)
+            for (int x = 0; x < MapSize; x++)
             {
-                RoomBaseMono currentRoom = _map[x, z];
+                RoomBaseMono currentRoom = _map[z, x];
                 RoomBaseMono north = null, south = null, east = null, west = null;
-                if (x > 0) east = _map[x - 1, z];
-                if (x < MapSize - 1) west = _map[x + 1, z];
-                if (z > 0) north = _map[x, z - 1];
-                if (z < MapSize - 1) south = _map[x, z + 1];
-                currentRoom.SetRooms(north, south, east, west);
+                north = GetRoomAt(x, z - 1);
+                south = GetRoomAt(x, z + 1);
+                east = GetRoomAt(x + 1, z);
+                west = GetRoomAt(x - 1, z);
+                currentRoom.SetRooms(north, east, south, west);
             }
         }
     }
