@@ -17,12 +17,14 @@ public class GameManager : MonoBehaviour
         _gameMap = Instantiate(GameMapPrefab, transform);
         _gameMap.transform.position = Vector3.zero;
 
+        _gameMap.CreateMap();
+
         Debug.Log("GameManager Map Created");
 
     }
     private void StartGame()
     {
-     
+      
     }
 
     // Update is called once per frame
