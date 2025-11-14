@@ -11,11 +11,13 @@ public class PlayerController : MonoBehaviour
     private RoomBaseMono _currentRoom;
     private bool _isRotating = false;
     private bool _isWalking = false;
+
     [SerializeField] private float RotationTime = 0.4f;
     [SerializeField] private float WalkingTime = 1f;
     private float _rotationTimer;
     private Quaternion _previousRotation;
     private Direction _facingDirection;
+
     private Dictionary<Direction, int> _rotationByDirection = new()
    {
        { Direction.North, 0 },
@@ -82,10 +84,12 @@ public class PlayerController : MonoBehaviour
     }
     private void MoveForward()
     {
+        if (_currentRoom == null) return;
+
         RoomBaseMono nextRoom = _currentRoom.GetRoom(_facingDirection);
         if (nextRoom == null)
         {
-            Debug.Log("Blocked: No room ahead!");
+            Debug.Log("Blocked: No room ahead.");
             return;
         }
         StartCoroutine(WalkToRoom(nextRoom));
@@ -122,6 +126,7 @@ public class PlayerController : MonoBehaviour
             room.OnRoomExited();
         }
     }
+
     private void Update()
     {
         if (_isRotating)
@@ -137,9 +142,23 @@ public class PlayerController : MonoBehaviour
                 SetFacingDirection();
             }
         }
-        //if (_isWalking)
-        //    {
+        // SEARCH ACTION
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            if (_currentRoom == null)
+            {
+                Debug.Log("You are not inside a room.");
+                return;
+            }
 
-        //    }
+            // Base search
+            _currentRoom.OnRoomSearched();
+
+            // Room-specific search
+            if (_currentRoom is IRoomAction actionRoom)
+            {
+                actionRoom.OnSearch();
+            }
+        }
     }
 }

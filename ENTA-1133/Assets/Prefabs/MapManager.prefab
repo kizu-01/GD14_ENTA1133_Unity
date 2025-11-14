@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RoomPrefabs:
-  - {fileID: 5312858025290863614, guid: 05184dc9af93e3644b841fb65a729ea3, type: 3}
-  - {fileID: 7065449072503516202, guid: 95ed0bb09f04515409e770e10c63ec5d, type: 3}
-  - {fileID: 6261147075499538986, guid: 60e60a12c0b555b4a938999cfbd7bc66, type: 3}
-  - {fileID: 6933401488925322755, guid: ffec70e4a64a87445b30b285c897280b, type: 3}
+  - {fileID: -2031531897146379174, guid: 95ed0bb09f04515409e770e10c63ec5d, type: 3}
+  - {fileID: -1246829735284158289, guid: 05184dc9af93e3644b841fb65a729ea3, type: 3}
+  - {fileID: 6353280390395059819, guid: 60e60a12c0b555b4a938999cfbd7bc66, type: 3}
+  - {fileID: 8317133621742943136, guid: ffec70e4a64a87445b30b285c897280b, type: 3}
   RoomSize: 2.5
   MapSize: 5

@@ -4,9 +4,9 @@ using UnityEngine;
 public class RoomBaseMono : MonoBehaviour
 {
     [SerializeField] private GameObject NorthDoorway, EastDoorway, SouthDoorway, WestDoor;
-    private RoomBaseMono _north, _south, _east, _west;
+    protected RoomBaseMono _north, _south, _east, _west;
 
-    public void SetRooms(RoomBaseMono roomNorth, RoomBaseMono roomEast, RoomBaseMono roomSouth, RoomBaseMono roomWest)
+    public virtual void SetRooms(RoomBaseMono roomNorth, RoomBaseMono roomEast, RoomBaseMono roomSouth, RoomBaseMono roomWest)
     {
         _north = roomNorth;
         NorthDoorway.SetActive(_north == null);
@@ -28,15 +28,17 @@ public class RoomBaseMono : MonoBehaviour
             _ => null
         };
     }
-    public void OnRoomEntered()
+    public virtual void OnRoomEntered()
     {
         Debug.Log($"Entered room: {name}");
     }
-    public void OnRoomExited()
+
+    public virtual void OnRoomExited()
     {
         Debug.Log($"Exited room: {name}");
     }
-    public void OnRoomSearched()
+
+    public virtual void OnRoomSearched()
     {
         Debug.Log($"Searching room: {name}");
     }
