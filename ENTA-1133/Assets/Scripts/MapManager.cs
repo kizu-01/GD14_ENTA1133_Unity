@@ -6,7 +6,10 @@ public class MapManager : MonoBehaviour
     [SerializeField] private RoomBaseMono[] RoomPrefabs;
     [SerializeField] private float RoomSize = 1;
     [SerializeField] private int MapSize = 3;
-    private RoomBaseMono[,] _map;
+    public RoomBaseMono[,] _map;
+    public RoomBaseMono[,] Rooms => _map;
+    public int Size => MapSize;
+
 
     public RoomBaseMono GetRoomAt(int x, int z) {
         if (x < 0 || x > _map.GetLength(1) - 1 || z < 0 || z > _map.GetLength(0) - 1)
@@ -21,7 +24,7 @@ public class MapManager : MonoBehaviour
         {
             for (int x = 0; x < MapSize; x++)
             {
-                Vector3 coords = new Vector3(x * RoomSize, 3, -z * RoomSize);
+                Vector3 coords = new Vector3(x * RoomSize, 2, -z * RoomSize);
 
                 var roomInstance = Instantiate(RoomPrefabs[Random.Range(0, RoomPrefabs.Length)], transform);
 

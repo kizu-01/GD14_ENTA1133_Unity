@@ -17,4 +17,27 @@ public class RoomBaseMono : MonoBehaviour
         _west = roomWest;
         WestDoor.SetActive(_west == null);
     }
+    public RoomBaseMono GetRoom(Direction direction)
+    {
+        return direction switch
+        {
+            Direction.North => _north,
+            Direction.East => _east,
+            Direction.South => _south,
+            Direction.West => _west,
+            _ => null
+        };
+    }
+    public void OnRoomEntered()
+    {
+        Debug.Log($"Entered room: {name}");
+    }
+    public void OnRoomExited()
+    {
+        Debug.Log($"Exited room: {name}");
+    }
+    public void OnRoomSearched()
+    {
+        Debug.Log($"Searching room: {name}");
+    }
 }
