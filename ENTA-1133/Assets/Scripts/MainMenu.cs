@@ -3,23 +3,29 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GameObject menuUI;        // for Main Menu
+    public GameObject gameplayUI;    // for UI Manager
+    public GameManager gameManager;  // for GameManager
+
     public void ButtonStartGame()
     {
-        gameObject.SetActive(false);
+        // Hide main menu UI
+        if (menuUI != null) menuUI.SetActive(false);
+
+        // Show gameplay UI
+        if (gameplayUI != null) gameplayUI.SetActive(true);
+
+        // Reset and start the game
+        if (gameManager != null)
+            gameManager.ResetGame();
     }
+
     public void ButtonExitGame()
     {
 #if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();
+        UnityEditor.EditorApplication.ExitPlaymode();
 #else
         Application.Quit();
 #endif
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
