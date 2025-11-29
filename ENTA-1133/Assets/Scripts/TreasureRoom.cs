@@ -1,35 +1,43 @@
 using UnityEngine;
 
-public class TreasureRoom : RoomBaseMono
+public class TreasureRoom : RoomBaseMono, IRoomAction
 {
-    private bool treasureTaken = false;
+    private bool taken = false;
 
     public override void OnRoomEntered()
     {
         base.OnRoomEntered();
-        if (!treasureTaken)
-            Debug.Log("A treasure chest is here!");
+        if (!taken)
+            GameUI.Instance.ShowDungeonLog("You see a treasure here!");
         else
-            Debug.Log("The treasure chest is empty.");
+            GameUI.Instance.ShowDungeonLog("Treasure already taken.");
     }
 
     public override void OnRoomExited()
     {
         base.OnRoomExited();
-        Debug.Log("Leaving the treasure room.");
+        GameUI.Instance.ShowDungeonLog("");
     }
 
-    public override void OnRoomSearched()
+    public void OnSearch()
     {
-        base.OnRoomSearched();
-        if (!treasureTaken)
+        if (!taken)
         {
-            treasureTaken = true;
-            Debug.Log("You found the treasure!");
+            taken = true;
+            var player = FindAnyObjectByType<PlayerStats>();
+            if (player != null)
+            {
+                player.CollectTreasure();
+                GameUI.Instance.ShowDungeonLog("Treasure Found!");
+            }
+            else
+            {
+                GameUI.Instance.ShowDungeonLog("Player not found.");
+            }
         }
         else
         {
-            Debug.Log("The chest is empty. Nothing left.");
+            GameUI.Instance.ShowDungeonLog("Treasure Already Taken.");
         }
     }
 }

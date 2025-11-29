@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,37 +17,38 @@ public class PlayerController : MonoBehaviour
     private Direction _facingDirection;
 
     private Dictionary<Direction, int> _rotationByDirection = new()
-   {
-       { Direction.North, 0 },
-       { Direction.East, 90 },
-       { Direction.South, 180 },
-       { Direction.West, 270 }
-   };
+    {
+        { Direction.North, 0 },
+        { Direction.East, 90 },
+        { Direction.South, 180 },
+        { Direction.West, 270 }
+    };
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Setup initial rotation
     public void Setup()
     {
-        // simple array of all directions
         Direction[] directions = new Direction[] { Direction.North, Direction.East, Direction.South, Direction.West };
-        // roll random direction
-        _facingDirection = directions[UnityEngine.Random.Range(0, directions.Length)];
-        // Update transform
+        _facingDirection = directions[Random.Range(0, directions.Length)];
         SetFacingDirection();
     }
-    // INPUT SYSTEM (Movement)
+
+    // Input System
     public void OnMove(InputValue value)
     {
         MoveInput(value.Get<Vector2>());
     }
+
     private void MoveInput(Vector2 directions)
     {
         if (_isWalking || _isRotating)
             return;
+
         Move = directions;
         if (directions.x < 0) TurnLeft();
         else if (directions.x > 0) TurnRight();
         else if (directions.y > 0) MoveForward();
     }
+
     private void TurnLeft()
     {
         if (_isRotating || _isWalking) return;
@@ -63,6 +62,7 @@ public class PlayerController : MonoBehaviour
         };
         _isRotating = true;
     }
+
     private void TurnRight()
     {
         if (_isRotating || _isWalking) return;
@@ -76,12 +76,14 @@ public class PlayerController : MonoBehaviour
         };
         _isRotating = true;
     }
+
     private void SetFacingDirection()
     {
         Vector3 facing = transform.rotation.eulerAngles;
         facing.y = _rotationByDirection[_facingDirection];
         transform.rotation = Quaternion.Euler(facing);
     }
+
     private void MoveForward()
     {
         if (_currentRoom == null) return;
@@ -89,11 +91,12 @@ public class PlayerController : MonoBehaviour
         RoomBaseMono nextRoom = _currentRoom.GetRoom(_facingDirection);
         if (nextRoom == null)
         {
-            Debug.Log("Blocked: No room ahead.");
+            GameUI.Instance.ShowDungeonLog("Blocked: No room ahead.");
             return;
         }
         StartCoroutine(WalkToRoom(nextRoom));
     }
+
     private IEnumerator WalkToRoom(RoomBaseMono nextRoom)
     {
         _isWalking = true;
@@ -108,6 +111,7 @@ public class PlayerController : MonoBehaviour
         }
         _isWalking = false;
     }
+
     // ROOM DETECTION
     private void OnTriggerEnter(Collider col)
     {
@@ -118,6 +122,7 @@ public class PlayerController : MonoBehaviour
             room.OnRoomEntered();
         }
     }
+
     private void OnTriggerExit(Collider col)
     {
         RoomBaseMono room = col.GetComponent<RoomBaseMono>();
@@ -142,22 +147,24 @@ public class PlayerController : MonoBehaviour
                 SetFacingDirection();
             }
         }
-        // SEARCH ACTION
+
+        // SEARCH ACTION (Space key)
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             if (_currentRoom == null)
             {
-                Debug.Log("You are not inside a room.");
+                GameUI.Instance.ShowDungeonLog("You are not inside a room.");
                 return;
             }
 
-            // Base search
-            _currentRoom.OnRoomSearched();
-
-            // Room-specific search
+            // Call OnSearch if room implements IRoomAction
             if (_currentRoom is IRoomAction actionRoom)
             {
                 actionRoom.OnSearch();
+            }
+            else
+            {
+                _currentRoom.OnRoomSearched();
             }
         }
     }
