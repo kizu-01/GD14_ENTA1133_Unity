@@ -3,7 +3,7 @@ using UnityEngine;
 public class CombatRoom : RoomBaseMono
 {
     private bool enemyDefeated = false;
-    private bool combatResolved = false; // NEW: prevents re-rolls (win or lose)
+    private bool combatResolved = false; // prevents re-rolls (win or lose)
 
     // expose whether this room's combat was resolved (either win or lose)
     public bool HasCombatResolved => combatResolved;
@@ -31,6 +31,6 @@ public class CombatRoom : RoomBaseMono
     {
         base.OnRoomSearched();
         if (enemyDefeated)
-            GameUI.Instance.ShowDungeonLog("You defeated the enemies here.");
+            GameUI.Instance.ShowDungeonLog("You defeated enemies here.");
     }
 }

@@ -9,7 +9,7 @@ public class HealRoom : RoomBaseMono, IRoomAction
         base.OnRoomEntered();
 
         if (!potionTaken)
-            GameUI.Instance.ShowDungeonLog("This is a healing room. Press SPACE to heal!");
+            GameUI.Instance.ShowDungeonLog("This is the heal room.");
         else
             GameUI.Instance.ShowDungeonLog("This room is empty.");
     }

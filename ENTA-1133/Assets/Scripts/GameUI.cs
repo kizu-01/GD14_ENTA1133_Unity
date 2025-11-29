@@ -21,8 +21,8 @@ public class GameUI : MonoBehaviour
     [Header("End Screens")]
     public GameObject winPanel;
     public GameObject gameOverPanel;
-    public Button winMainMenuButton; // assign in inspector
-    public Button gameOverMainMenuButton; // assign in inspector
+    public Button winMainMenuButton; // assigned in inspector
+    public Button gameOverMainMenuButton; // assigned in inspector
 
     private CombatRoom currentCombatRoom = null;
     private bool combatInProgress = false;
@@ -147,7 +147,7 @@ public class GameUI : MonoBehaviour
         // pause the game but allow UI interaction
         Time.timeScale = 0f;
 
-        // Optional: ensure Canvas uses Unscaled Time so buttons work
+        // Canvas uses Unscaled Time so buttons work
         Canvas canvas = winPanel != null ? winPanel.GetComponent<Canvas>() : null;
         if (canvas != null)
             canvas.worldCamera = Camera.main;
