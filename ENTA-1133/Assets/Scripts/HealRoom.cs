@@ -1,34 +1,48 @@
 using UnityEngine;
 
-public class HealRoom : RoomBaseMono
+public class HealRoom : RoomBaseMono, IRoomAction
 {
     private bool potionTaken = false;
+
     public override void OnRoomEntered()
     {
         base.OnRoomEntered();
+
         if (!potionTaken)
-            Debug.Log("This is a healing room.");
+            GameUI.Instance.ShowDungeonLog("This is a healing room. Press SPACE to heal!");
         else
-            Debug.Log("This room is empty.");
+            GameUI.Instance.ShowDungeonLog("This room is empty.");
     }
 
     public override void OnRoomExited()
     {
         base.OnRoomExited();
-        Debug.Log("Leaving the healing room.");
+        GameUI.Instance.ShowDungeonLog(""); // clear when leaving
     }
 
-    public override void OnRoomSearched()
+    public void OnSearch()
     {
-        base.OnRoomSearched();
-        if (!potionTaken)
+        if (potionTaken)
         {
-            potionTaken = true;
-            Debug.Log("You found a healing potion!");
+            GameUI.Instance.ShowDungeonLog("No potion left here.");
+            return;
         }
-        else
+
+        var player = FindAnyObjectByType<PlayerStats>();
+        if (player == null)
         {
-            Debug.Log("The room is empty. Nothing left.");
+            GameUI.Instance.ShowDungeonLog("No player found.");
+            return;
         }
+
+        if (player.HP >= 100)
+        {
+            GameUI.Instance.ShowDungeonLog("Your HP is full. Potion not used.");
+            return;
+        }
+
+        potionTaken = true;
+        player.Heal(20);
+        GameUI.Instance.ShowDungeonLog("+20 HP healed!");
     }
 }
